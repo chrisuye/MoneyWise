@@ -1,44 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import Select from 'react-select';
+import { BsSortDownAlt, BsSortUpAlt } from 'react-icons/bs';
 
 const SpendingList = ({ budget, total }) => {
-    const [selected, setSelected] = useState([]);
+    const [sort, setSort] = useState(1);
     const [direction, setDirection] = useState('asc');
-    
-
-    const options = [
-        { value: 'Date', label: 'Date' },
-        { value: 'Category', label: 'Category' },
-        { value: 'Amount', label: 'Amount' },
-        { value: 'Description', label: 'Description' },
-    ];
-
-    const handleDirections = (e) => {
-        if (direction === 'asc') {
-            setDirection('desc');
-        } else {
-            setDirection('asc');
-        }
-    };
 
     useEffect(() => {
-        switch (selected.value) {
-            case 'Date':
-                direction === 'asc' ?
-                    budget.sort((a, b) => (new Date(a.Date) - new Date(b.Date))) :
-                    budget.sort((a, b) => (new Date(b.Date) - new Date(a.Date)));
-                break;
-            case 'Category':
-                direction === 'asc' ?
-                    budget.sort((a, b) => (a.Category.localeCompare(b.Category))) :
-                    budget.sort((a, b) => (b.Category.localeCompare(a.Category)));
-                break;
-            case 'Amount':
+        switch (sort) {
+            case 1:
                 direction === 'asc' ?
                     budget.sort((a, b) => (a.Amount - b.Amount)) :
                     budget.sort((a, b) => (b.Amount - a.Amount));
                 break;
-            case 'Description':
+            case 2:
+                direction === 'asc' ?
+                    budget.sort((a, b) => (new Date(a.Date) - new Date(b.Date))) :
+                    budget.sort((a, b) => (new Date(b.Date) - new Date(a.Date)));
+                break;
+            case 3:
+                direction === 'asc' ?
+                    budget.sort((a, b) => (a.Category.localeCompare(b.Category))) :
+                    budget.sort((a, b) => (b.Category.localeCompare(a.Category)));
+                break;
+            case 4:
                 direction === 'asc' ?
                     budget.sort((a, b) => (a.Description.localeCompare(b.Description))) :
                     budget.sort((a, b) => (b.Description.localeCompare(a.Description)));
@@ -46,24 +30,20 @@ const SpendingList = ({ budget, total }) => {
             default:
                 break;
         }
-    }, [budget, selected, direction]);
+    }, [budget, sort, direction]);
 
     return (
         <div className="spending-list">
             <div className="spending-list-header">
                 <label>Total spent: {total}$</label>
             </div>
-            <div className="spending-list-select">
-                <Select options={options} onChange={(e) => setSelected(e)} />
-                <button onClick={() => handleDirections()}>{direction === 'asc' ? 'Ascending' : 'Descending'}</button>
-            </div>
             <table>
                 <thead>
                     <tr>
-                        <th>Amount</th>
-                        <th>Date</th>
-                        <th>Category</th>
-                        <th>Description</th>
+                        <th onClick={() => setSort(1)}>Amount { sort === 1 ? direction === 'asc' ? <BsSortDownAlt onClick={() => setDirection('dsc')} /> : <BsSortUpAlt onClick={() => setDirection('asc')}/> : null}</th>
+                        <th onClick={() => setSort(2)}>Date  { sort === 2 ? direction === 'asc' ? <BsSortDownAlt onClick={() => setDirection('dsc')}/> : <BsSortUpAlt onClick={() => setDirection('asc')}/> : null}</th>
+                        <th onClick={() => setSort(3)}>Category { sort === 3 ? direction === 'asc' ? <BsSortDownAlt onClick={() => setDirection('dsc')}/> : <BsSortUpAlt onClick={() => setDirection('asc')}/> : null}</th>
+                        <th onClick={() => setSort(4)}>Description { sort === 4 ? direction === 'asc' ? <BsSortDownAlt onClick={() => setDirection('dsc')}/> : <BsSortUpAlt onClick={() => setDirection('asc')}/> : null}</th>
                     </tr>
                 </thead>
                 <tbody>
