@@ -11,6 +11,12 @@ div.budget-input {
     padding: 10px;
 }
 
+label {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
 input {
     width: fit-content;
     height: 40px;
@@ -23,12 +29,15 @@ input {
 
 button {
     width: fit-content;
-    height: 40px;
+    height: fit-content;
     border: 1px solid #ccc;
     border-radius: 5px;
     padding: 0 10px;
-    font-size: 1.2em;
+    font-size: 2em;
     margin-bottom: 10px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
 }
 
 label {

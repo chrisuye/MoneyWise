@@ -2,35 +2,42 @@ import React, { useState, useEffect } from 'react';
 import { BsSortDownAlt, BsSortUpAlt } from 'react-icons/bs';
 
 const SpendingList = ({ budget, total }) => {
-    const [sort, setSort] = useState(1);
-    const [direction, setDirection] = useState('asc');
+    const [table, setTable] = useState(budget);
+    const [sort, setSort] = useState(JSON.parse(localStorage.getItem('sort')) ? JSON.parse(localStorage.getItem('sort')).sort : 1);
+    const [direction, setDirection] = useState(JSON.parse(localStorage.getItem('sort')) ? JSON.parse(localStorage.getItem('sort')).direction : 'asc');
+    localStorage.setItem('sort', JSON.stringify({sort, direction}));
 
     useEffect(() => {
+        localStorage.setItem('sort', JSON.stringify({sort, direction}));
         switch (sort) {
             case 1:
                 direction === 'asc' ?
                     budget.sort((a, b) => (a.Amount - b.Amount)) :
                     budget.sort((a, b) => (b.Amount - a.Amount));
+                setTable(budget);
                 break;
             case 2:
                 direction === 'asc' ?
                     budget.sort((a, b) => (new Date(a.Date) - new Date(b.Date))) :
                     budget.sort((a, b) => (new Date(b.Date) - new Date(a.Date)));
+                setTable(budget);
                 break;
             case 3:
                 direction === 'asc' ?
                     budget.sort((a, b) => (a.Category.localeCompare(b.Category))) :
                     budget.sort((a, b) => (b.Category.localeCompare(a.Category)));
+                setTable(budget);
                 break;
             case 4:
                 direction === 'asc' ?
                     budget.sort((a, b) => (a.Description.localeCompare(b.Description))) :
                     budget.sort((a, b) => (b.Description.localeCompare(a.Description)));
+                setTable(budget);
                 break;
             default:
                 break;
         }
-    }, [budget, sort, direction]);
+    }, [table, sort, direction, budget]);
 
     return (
         <div className="spending-list">
@@ -47,9 +54,9 @@ const SpendingList = ({ budget, total }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {budget.map((item, index) => (
+                    {table.map((item, index) => (
                         <tr key={index}>
-                            <td>{item.Amount}</td>
+                            <td>{item.Amount}$</td>
                             <td>{item.Date}</td>
                             <td>{item.Category}</td>
                             <td>{item.Description}</td>
